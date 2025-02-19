@@ -1,9 +1,11 @@
-from typing import Optional, List
+from typing import List, Optional
 
 from pydantic import BaseModel, Field, PositiveInt
 
 
-class HardDriveSchemaCreate(BaseModel):
+class HDSchemaCreate(BaseModel):
+    """Hard drives create schema."""
+
     vm_id: Optional[int] = Field(
         None, title="Virtual machine Id", description="Id виртуальной машины."
     )
@@ -12,7 +14,9 @@ class HardDriveSchemaCreate(BaseModel):
     )
 
 
-class HardDriveSchemaUpdate(BaseModel):
+class HDSchemaUpdate(BaseModel):
+    """Hard drives update schema."""
+
     vm_id: Optional[int] = Field(
         ..., title="Virtual machine Id", description="Id виртуальной машины."
     )
@@ -21,36 +25,52 @@ class HardDriveSchemaUpdate(BaseModel):
     )
 
 
-class HardDriveSchemaDB(HardDriveSchemaCreate):
+class HDSchemaDB(HDSchemaCreate):
+    """Hard drives database schema."""
+
     id: int = Field(..., title="Id", description="Id в базе данных.")
 
 
-class VirtualMachineSchemaCreate(BaseModel):
+class VMSchemaCreate(BaseModel):
+    """Virtual Machine create schema."""
+
     ram_amount: PositiveInt = Field(
-        ..., title="RAM amount", description="Количетво оперативной памяти у VM."
+        ...,
+        title="RAM amount",
+        description="Количетво оперативной памяти у VM.",
     )
     cpu_amount: PositiveInt = Field(
         ..., title="CPU amount", description="Количество выделеных CPU."
     )
-    token: str = Field(..., title="Auth token", description="Токен авторизации.")
-    is_online: bool = Field(False, title="Is online", description="Флаг подключения.")
+    is_online: bool = Field(
+        True, title="Is online", description="Флаг подключения."
+    )
+    is_auth: bool = Field(
+        True, title="Is auth", description="Флаг аунтефикации подключения."
+    )
 
 
-class VirtualMachineSchemaUpdate(BaseModel):
+class VMSchemaUpdate(BaseModel):
+    """Virtual Machine update schema."""
+
     ram_amount: Optional[PositiveInt] = Field(
-        None, title="RAM amount", description="Количетво оперативной памяти у VM."
+        None,
+        title="RAM amount",
+        description="Количетво оперативной памяти у VM.",
     )
     cpu_amount: Optional[PositiveInt] = Field(
         None, title="CPU amount", description="Количество выделеных CPU."
     )
-    token: Optional[str] = Field(
-        None, title="Auth token", description="Токен авторизации."
-    )
     is_online: Optional[bool] = Field(
         None, title="Is online", description="Флаг подключения."
     )
+    is_auth: Optional[bool] = Field(
+        None, title="Is auth", description="Флаг аунтефикации подключения."
+    )
 
 
-class VirtualMachineSchemaDB(VirtualMachineSchemaCreate):
+class VMSchemaDB(VMSchemaCreate):
+    """Virtual Machine database schema."""
+
     id: int = Field(..., title="Id", description="Id в базе данных.")
-    hard_drives: List[HardDriveSchemaDB] = []
+    hard_drives: List[HDSchemaDB] = []

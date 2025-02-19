@@ -1,19 +1,22 @@
 import asyncio
+from pathlib import Path
+
 import asyncpg
+from core.config import database_config
+from core.constants import MG_SCRIPT
 
-from config import database_config
 
-
-async def run_migration():
+async def run_migration(sql_script_file: Path):
+    """Run migration script."""
     conn = await asyncpg.connect(
         user=database_config.user,
         password=database_config.password,
         database=database_config.db,
         host=database_config.host,
-        port=database_config.port
+        port=database_config.port,
     )
 
-    with open("migrations/init.sql", "r") as f:
+    with open(sql_script_file, "r") as f:
         sql_script = f.read()
 
     try:
@@ -26,4 +29,4 @@ async def run_migration():
 
 
 if __name__ == "__main__":
-    asyncio.run(run_migration())
+    asyncio.run(run_migration(MG_SCRIPT))

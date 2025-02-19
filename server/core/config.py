@@ -1,7 +1,6 @@
+from core.constants import ENV_PATH
 from pydantic import Field
 from pydantic_settings import BaseSettings
-
-from constants import ENV_PATH
 
 
 class _SettingsBase(BaseSettings):
@@ -26,7 +25,7 @@ class SettingsDatabase(_SettingsBase):
     @property
     def database_url(self) -> str:
         """Return database url from .env ."""
-        return "postgresql+asyncpg://{}:{}@{}:{}/{}".format(
+        return "postgres://{}:{}@{}:{}/{}".format(
             self.user,
             self.password,
             self.host,
